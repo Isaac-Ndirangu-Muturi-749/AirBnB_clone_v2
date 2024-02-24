@@ -22,16 +22,16 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
 
     classes = {
-               'BaseModel': BaseModel, 'User': User, 'Place': Place,
-               'State': State, 'City': City, 'Amenity': Amenity,
-               'Review': Review
-              }
+        'BaseModel': BaseModel, 'User': User, 'Place': Place,
+        'State': State, 'City': City, 'Amenity': Amenity,
+        'Review': Review
+    }
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
     types = {
-             'number_rooms': int, 'number_bathrooms': int,
-             'max_guest': int, 'price_by_night': int,
-             'latitude': float, 'longitude': float
-            }
+        'number_rooms': int, 'number_bathrooms': int,
+        'max_guest': int, 'price_by_night': int,
+        'latitude': float, 'longitude': float
+    }
 
     def preloop(self):
         """Prints if isatty is false"""
@@ -118,44 +118,41 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """Creates a new instance of a Model"""
-        if arg:
-            try:
-                args = arg.split()
-                template = models.dummy_classes[args[0]]
-                new_instance = template()
-                try:
-                    for pair in args[1:]:
-                        pair_split = pair.split("=")
-                        if (hasattr(new_instance, pair_split[0])):
-                            value = pair_split[1]
-                            flag = 0
-                            if (value.startswith('"')):
-                                value = value.strip('"')
-                                value = value.replace("\\", "")
-                                value = value.replace("_", " ")
-                            elif ("." in value):
-                                try:
-                                    value = float(value)
-                                except:
-                                    flag = 1
-                            else:
-                                try:
-                                    value = int(value)
-                                except:
-                                    flag = 1
-                            if (not flag):
-                                setattr(new_instance, pair_split[0], value)
-                        else:
-                            continue
-                    new_instance.save()
-                    print(new_instance.id)
-                except:
-                    new_instance.rollback()
-            except:
-                print("** class doesn't exist **")
-                models.storage.rollback()
-        else:
+        if not arg:
             print("** class name missing **")
+            return
+        args = arg.split()
+        class_name = args[0]
+        try:
+            template = models.dummy_classes[class_name]
+        except KeyError:
+            print("** class doesn't exist **")
+            return
+        new_instance = template()
+        try:
+            for pair in args[1:]:
+                key, value = pair.split("=")
+                if hasattr(new_instance, key):
+                    if value.startswith('"'):
+                        value = value.strip('"').replace(
+                            "\\", "").replace("_", " ")
+                    elif "." in value:
+                        try:
+                            value = float(value)
+                        except ValueError:
+                            continue
+                    else:
+                        try:
+                            value = int(value)
+                        except ValueError:
+                            continue
+                    setattr(new_instance, key, value)
+            new_instance.save()
+            print(new_instance.id)
+        except Exception as e:
+            print(f"Error creating instance: {e}")
+            if hasattr(new_instance, 'rollback'):
+                new_instance.rollback()
 
     def help_create(self):
         """ Help information for the create method """
