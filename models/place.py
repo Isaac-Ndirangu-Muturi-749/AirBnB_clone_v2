@@ -12,9 +12,11 @@ storage_engine = os.environ.get("HBNB_TYPE_STORAGE")
 place_amenity = Table(
     name='place_amenity',
     metadata=Base.metadata,
-    Column('place_id', String(60), ForeignKey('places.id'), primary_key=True, nullable=False),
-    Column('amenity_id', String(60), ForeignKey('amenities.id'), primary_key=True, nullable=False)
-    )
+    Column('place_id', String(60), ForeignKey('places.id'),
+           primary_key=True, nullable=False),
+    Column('amenity_id', String(60), ForeignKey('amenities.id'),
+           primary_key=True, nullable=False)
+)
 
 
 class Place(BaseModel, Base):
@@ -34,8 +36,14 @@ class Place(BaseModel, Base):
 
         user = relationship("User", back_populates="places")
         city = relationship("City", back_populates="places")
-        reviews = relationship("Review", cascade="all, delete", back_populates="place")
-        amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
+        reviews = relationship(
+            "Review",
+            cascade="all, delete",
+            back_populates="place")
+        amenities = relationship(
+            "Amenity",
+            secondary=place_amenity,
+            viewonly=False)
     else:
         city_id = ""
         user_id = ""
@@ -57,7 +65,8 @@ class Place(BaseModel, Base):
             # Get all reviews from the database session for the Review class
             all_reviews = models.storage.all(review_cls).values()
             # Filter reviews based on the place_id matching self.id
-            matching_reviews = [review for review in all_reviews if review.place_id == self.id]
+            matching_reviews = [
+                review for review in all_reviews if review.place_id == self.id]
             return matching_reviews
 
         @property
@@ -75,7 +84,6 @@ class Place(BaseModel, Base):
                     amenity_instances.append(amenity_instance)
             # Return the list of Amenity instances
             return amenity_instances
-
 
         @amenities.setter
         def amenities(self, amenity_instance):
