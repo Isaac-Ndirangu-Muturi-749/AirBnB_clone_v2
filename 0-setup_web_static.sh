@@ -38,15 +38,8 @@ chown -R ubuntu:ubuntu /data
 # Update Nginx configuration
 # Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
 # (ex: https://mydomainname.tech/hbnb_static)
+sudo sed -i '/server_name _;/a \\n\t# Add alias for serving web_static content\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
 
-# Remove newlines and escape special characters in nginx_config_entry
-nginx_config_entry='
-	location /hbnb_static {\
-		alias /data/web_static/current;\
-	}'
-
-# Insert the nginx_config_entry into the Nginx configuration file
-sed -i -e "\$i\\$nginx_config_entry" /etc/nginx/sites-available/default
 
 # Restart Nginx
 service nginx restart
