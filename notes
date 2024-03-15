@@ -69,3 +69,11 @@ server {
 		alias /data/web_static/current;
 	}
 }
+
+
+fab -f 2-do_deploy_web_static.py do_deploy:archive_path=versions/web_static_20240315164536.tgz
+
+
+curl 35.153.193.23/hbnb_static/0-index.html
+
+env.hosts = ['35.153.193.23', '54.146.94.67']
