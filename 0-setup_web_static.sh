@@ -3,8 +3,8 @@
 
 # Install Nginx if not already installed
 if ! dpkg -l nginx &> /dev/null; then
-    apt-get -y update
-    apt-get -y install nginx
+	apt-get -y update
+	apt-get -y install nginx
 fi
 
 # Create necessary directories
@@ -12,11 +12,11 @@ mkdir -p /data/web_static/releases/test /data/web_static/shared
 
 # Create a fake HTML file for testing
 html_content="<html>
-  <head>
-  </head>
-  <body>
-    ALX Africa
-  </body>
+	<head>
+	</head>
+	<body>
+		ALX Africa
+	</body>
 </html>"
 
 echo "$html_content" > /data/web_static/releases/test/index.html
@@ -25,7 +25,7 @@ echo "$html_content" > /data/web_static/releases/test/index.html
 # Create symbolic link
 # If the symbolic link already exists, it should be deleted and recreated every time the script is ran.
 if [ -L /data/web_static/current ]; then
-    rm /data/web_static/current
+	rm /data/web_static/current
 fi
 
 ln -s /data/web_static/releases/test /data/web_static/current
@@ -38,9 +38,15 @@ chown -R ubuntu:ubuntu /data
 # Update Nginx configuration
 # Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
 # (ex: https://mydomainname.tech/hbnb_static)
-nginx_config_entry='\n\t# Add alias for serving web_static content\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current;\n\t}'
-# shellcheck disable=SC1003
-sed -i -e '$i\'"$nginx_config_entry" /etc/nginx/sites-available/default
+
+# Remove newlines and escape special characters in nginx_config_entry
+nginx_config_entry='
+	location /hbnb_static {\
+		alias /data/web_static/current;\
+	}'
+
+# Insert the nginx_config_entry into the Nginx configuration file
+sed -i -e "\$i\\$nginx_config_entry" /etc/nginx/sites-available/default
 
 # Restart Nginx
 service nginx restart
