@@ -33,37 +33,39 @@ pip3 install Fabric3==1.14.post1
 sudo vi /etc/nginx/sites-available/default
 
 
-
 # Default server configuration
 #
 server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
+	listen 80 default_server;
+	listen [::]:80 default_server;
 
-        root /var/www/html;
-        index index.html index.htm index.nginx-debian.html;
+	root /var/www/html;
+	index index.html index.htm index.nginx-debian.html;
 
-        server_name _;
+	server_name _;
 
-        # Add custom header
-        add_header X-Served-By $hostname;
+	# Add alias for serving web_static content
+	location /hbnb_static/ {
+		alias /data/web_static/current/;
+	}
 
-        # Add redirect for /redirect_me
-        location /redirect_me {
-                return 301 https://github.com/Isaac-Ndirangu-Muturi-749;
-        }
+	# Add custom header
+	add_header X-Served-By $hostname;
 
-        # Add custom error page redirection
-        error_page 404 /custom_404.html;
-        location = /custom_404.html {
-                root /usr/share/nginx/html;
-                internal;
-        }
+	# Add redirect for /redirect_me
+	location /redirect_me {
+		return 301 https://github.com/Isaac-Ndirangu-Muturi-749;
+	}
 
-        # Add alias for serving web_static content
-        location /hbnb_static {
-                alias /data/web_static/current;
-        }
+	# Add custom error page redirection
+	error_page 404 /custom_404.html;
+	location = /custom_404.html {
+		root /usr/share/nginx/html;
+		internal;
+	}
+
+	# Add alias for serving web_static content
+	location /hbnb_static {
+		alias /data/web_static/current;
+	}
 }
-
-
