@@ -1,49 +1,18 @@
 #!/usr/bin/python3
 
 
-Fabric is a Python library and command-line tool for streamlining the use of 
-SSH for application deployment or systems administration tasks. It provides 
+Fabric is a Python library and command-line tool for streamlining the use of
+SSH for application deployment or systems administration tasks. It provides
 a basic suite of operations for executing local or remote shell commands
  (normally or via sudo) and uploading/downloading files, as well as auxiliary
   functionality such as prompting the running user for input, or aborting
-   execution. This concept is important: execute commands locally or remotely. 
-   Locally means in your laptop (physical laptop or inside your Vagrant), 
-   and Remotely means on your server(s). Fabric is taking care of all network 
-   connections (SSH, SCP etc.), it’s an easy tool for transferring, executing, 
+   execution. This concept is important: execute commands locally or remotely.
+   Locally means in your laptop (physical laptop or inside your Vagrant),
+   and Remotely means on your server(s). Fabric is taking care of all network
+   connections (SSH, SCP etc.), it’s an easy tool for transferring, executing,
    etc. commands from locale to a remote server.
 
 
-# Default server configuration
-#
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-
-    root /var/www/html;
-    index index.html index.htm index.nginx-debian.html;
-
-    server_name _;
-
-    # Add custom header
-    add_header X-Served-By $hostname;
-
-    # Add redirect for /redirect_me
-    location /redirect_me {
-        return 301 https://github.com/Isaac-Ndirangu-Muturi-749;
-    }
-
-    # Add custom error page redirection
-    error_page 404 /custom_404.html;
-    location = /custom_404.html {
-        root /usr/share/nginx/html;
-        internal;
-    }
-
-    # Add alias for serving web_static content
-    location /hbnb_static {
-            alias /data/web_static/current;
-    }
-}
 
 pip3 uninstall Fabric
 sudo apt-get install libffi-dev
@@ -58,5 +27,43 @@ pip3 install cryptography==2.8
 pip3 install bcrypt==3.1.7
 pip3 install PyNaCl==1.3.0
 pip3 install Fabric3==1.14.post1
+
+
+
+sudo vi /etc/nginx/sites-available/default
+
+
+
+# Default server configuration
+#
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        root /var/www/html;
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name _;
+
+        # Add custom header
+        add_header X-Served-By $hostname;
+
+        # Add redirect for /redirect_me
+        location /redirect_me {
+                return 301 https://github.com/Isaac-Ndirangu-Muturi-749;
+        }
+
+        # Add custom error page redirection
+        error_page 404 /custom_404.html;
+        location = /custom_404.html {
+                root /usr/share/nginx/html;
+                internal;
+        }
+
+        # Add alias for serving web_static content
+        location /hbnb_static {
+                alias /data/web_static/current;
+        }
+}
 
 
