@@ -64,6 +64,8 @@ def do_deploy(archive_path):
 			full_path))
 
 		# Return True if all operations have been completed successfully
+		print('New version deployed!')
+
 		return True
 	except:
 		# Return False if any operation fails
