@@ -9,9 +9,6 @@ import os
 
 def do_pack():
     """Generates a .tgz archive from the contents of the web_static folder"""
-    # Check if the web_static folder exists
-    if not os.path.exists("web_static"):
-        return None
 
     # Create the versions folder if it doesn't exist
     if not os.path.exists("versions"):
