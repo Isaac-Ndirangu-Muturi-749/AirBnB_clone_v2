@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """Fabric script that creates and distributes an archive to your web servers
 and performs deployment"""
 
@@ -16,17 +16,10 @@ env.key_filename = '~/.ssh/alxse'
 def do_pack():
     """Creates a compressed archive from the contents of web_static folder"""
 
-    # Create the folder if it doesn't exist
     local("mkdir -p versions")
-
-    # Create the filename using the current date and time
     filename = "versions/web_static_{}.tgz".format(
         datetime.now().strftime("%Y%m%d%H%M%S"))
-
-    # Compress the folder into a .tgz file
     result = local("tar -cvzf {} web_static".format(filename))
-
-    # Return the path of the created archive if successful, otherwise None
     if result.succeeded:
         return filename
     else:
