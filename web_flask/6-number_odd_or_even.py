@@ -30,7 +30,7 @@ def show_c_text(text):
 @app.route('/python/', defaults={'text': 'is cool'}, strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def show_python_text(text):
-    """Route that displays 'Python ' followed by the value of the text variable"""
+    """Route that displays 'Python ' followed by value of the text variable"""
     return 'Python ' + text.replace('_', ' ')
 
 
@@ -48,9 +48,13 @@ def show_number_template(n):
 
 @app.route('/number_odd_or_even/<int:n>', strict_slashes=False)
 def show_number_odd_or_even(n):
-    """Route that displays an HTML page only if n is an integer and shows if it's odd or even"""
+    """Route that displays an HTML page only if n is an integer
+    and shows if it's odd or even"""
     odd_or_even = 'even' if n % 2 == 0 else 'odd'
-    return render_template('6-number_odd_or_even.html', n=n, odd_or_even=odd_or_even)
+    return render_template(
+        '6-number_odd_or_even.html',
+        n=n,
+        odd_or_even=odd_or_even)
 
 
 if __name__ == '__main__':
