@@ -5,7 +5,6 @@ import uuid
 from datetime import datetime, timezone
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, DateTime
-from models import storage_type
 import models
 
 

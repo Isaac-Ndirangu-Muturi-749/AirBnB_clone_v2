@@ -107,3 +107,11 @@ echo 'create Review place_id="38a98ee9-6ef0-4830-b4a0-ed2e68cdc42e" user_id="479
 hbnb_dev_pwd
 
 hbnb_test_pwd
+
+
+
+mysql_config_editor set --login-path=mysql_login_path --socket=/var/run/mysqld/mysqld.sock
+
+
+
+mysql -u root -p -e "select @@socket"
