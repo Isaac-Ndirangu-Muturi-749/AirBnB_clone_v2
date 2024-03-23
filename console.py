@@ -114,25 +114,47 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, args):
-        """ Create an object of a class"""
-        try:
-            if not args:
-                raise SyntaxError()
-            arg_list = args.split(" ")
-            kw = {}
-            for arg in arg_list[1:]:
-                arg_splited = arg.split("=")
-                arg_splited[1] = eval(arg_splited[1])
-                if type(arg_splited[1]) is str:
-                    arg_splited[1] = arg_splited[1]
-                    replace("_", " ").replace('"', '\\"')
-                kw[arg_splited[0]] = arg_splited[1]
-        except SyntaxError:
+        """ Create an object of any class"""
+        if not args:
             print("** class name missing **")
-        except NameError:
+            return
+
+        # Split the arguments into class name and parameters
+        class_name, *params = args.split()
+
+        # Check if the class exists
+        if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
-        new_instance = HBNBCommand.classes[arg_list[0]](**kw)
+            return
+
+        # Initialize an empty dictionary to store parameters
+        obj_params = {}
+
+        # Parse the parameters
+        for param in params:
+            # Split each parameter into key and value
+            key, value = param.split("=")
+            # Remove surrounding double quotes from value if present
+            if value.startswith('"') and value.endswith('"'):
+                value = value[1:-1]
+                # Replace underscores with spaces in the value
+                value = value.replace('_', ' ')
+            # Try to convert the value to int or float if possible
+            try:
+                if '.' in value:
+                    value = float(value)
+                else:
+                    value = int(value)
+            except ValueError:
+                pass
+            # Add the key-value pair to the object parameters
+            obj_params[key] = value
+
+        # Create a new instance of the class with the parsed parameters
+        new_instance = HBNBCommand.classes[class_name](**obj_params)
+        # Save the instance to the storage
         new_instance.save()
+        # Print the ID of the newly created instance
         print(new_instance.id)
 
     def help_create(self):
@@ -223,23 +245,6 @@ class HBNBCommand(cmd.Cmd):
                 print_list.append(str(v))
 
         print(print_list)
-
-    def do_all(self, arg):
-        """Prints string representations of instances"""
-        args = shlex.split(arg)
-        obj_list = []
-        if len(args) == 0:
-            obj_dict = models.storage.all()
-        elif args[0] in classes:
-            obj_dict = models.storage.all(classes[args[0]])
-        else:
-            print("** class doesn't exist **")
-            return False
-        for key in obj_dict:
-            obj_list.append(str(obj_dict[key]))
-        print("[", end="")
-        print(", ".join(obj_list), end="")
-        print("]")
 
     def help_all(self):
         """ Help information for the all command """
