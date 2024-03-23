@@ -8,6 +8,7 @@ import models
 from models.city import City
 import os
 
+
 class State(BaseModel, Base):
     """A class for representing State objects"""
     __tablename__ = 'states'
