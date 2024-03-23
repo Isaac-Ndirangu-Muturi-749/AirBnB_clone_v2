@@ -6,15 +6,20 @@ Script that starts a Flask web application
 from flask import Flask, render_template
 from models import storage
 from models.state import State
+from models.city import City
+from models.amenity import Amenity
 
 app = Flask(__name__)
 
 
-@app.route('/states_list', strict_slashes=False)
-def states_list():
-    """Display a HTML page"""
+@app.route('/hbnb_filters', strict_slashes=False)
+def hbnb_filters():
+    """Display a HTML page with filters"""
     states = storage.all(State).values()
-    return render_template('7-states_list.html', states=states)
+    cities = storage.all(City).values()
+    amenities = storage.all(Amenity).values()
+    return render_template('10-hbnb_filters.html',
+                           states=states, cities=cities, amenities=amenities)
 
 
 @app.teardown_appcontext
