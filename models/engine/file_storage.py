@@ -46,8 +46,8 @@ class FileStorage:
         update the JSON file to reflect any change in the objects
         """
         temp = {}
-        for id, obj in self.__objects.items():
-            temp[id] = obj.to_dict()
+        for key, obj in self.__objects.items():
+            temp[key] = obj.to_dict()
         with open(self.__file_path, "w", encoding="UTF-8") as json_file:
             json.dump(temp, json_file)
 
@@ -56,12 +56,11 @@ class FileStorage:
         """
         update __objects dict to restore previously created objects
         """
-        try:
-            with open(self.__file_path, "r", encoding="UTF-8") as json_file:
-                data = json.load(json_file)
-                for id, dict in data.items():
-                    obj_instance = eval(dict["__class__"])(**dict)
-                    self.__objects[id] = obj_instance
+        with open(self.__file_path, "r", encoding="UTF-8") as json_file:
+            data = json.load(json_file)
+            for id, dict in data.items():
+                obj_instance = eval(dict["__class__"])(**dict)
+                self.__objects[id] = obj_instance
 
 
     def delete(self, obj=None):
