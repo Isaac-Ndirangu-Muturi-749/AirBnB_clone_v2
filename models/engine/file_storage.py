@@ -62,8 +62,6 @@ class FileStorage:
                 for id, dict in data.items():
                     obj_instance = eval(dict["__class__"])(**dict)
                     self.__objects[id] = obj_instance
-        except Exception as e:
-            raise StorageReloadError(f"An error occurred during reload: {e}")
 
 
     def delete(self, obj=None):
