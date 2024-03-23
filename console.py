@@ -10,6 +10,8 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+import models
+from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
@@ -228,6 +230,35 @@ class HBNBCommand(cmd.Cmd):
         print("Destroys an individual instance of a class")
         print("[Usage]: destroy <className> <objectId>\n")
 
+
+    def do_destroyall(self, args):
+        """ Destroys all objects of a specified class """
+        if not args:
+            print("** class name missing **")
+            return
+
+        class_name = args.split()[0]
+
+        if class_name not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
+
+        objects_to_delete = []
+        for key in storage.all().keys():
+            if key.split('.')[0] == class_name:
+                objects_to_delete.append(key)
+
+        if not objects_to_delete:
+            print("** no instances found **")
+            return
+
+        for key in objects_to_delete:
+            del storage.all()[key]
+
+        storage.save()
+
+
+
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         print_list = []
@@ -245,6 +276,23 @@ class HBNBCommand(cmd.Cmd):
                 print_list.append(str(v))
 
         print(print_list)
+
+    # def do_all(self, arg):
+    #     """Prints string representations of instances"""
+    #     args = shlex.split(arg)
+    #     obj_list = []
+    #     if len(args) == 0:
+    #         obj_dict = models.storage.all()
+    #     elif args[0] in classes:
+    #         obj_dict = models.storage.all(classes[args[0]])
+    #     else:
+    #         print("** class doesn't exist **")
+    #         return False
+    #     for key in obj_dict:
+    #         obj_list.append(str(obj_dict[key]))
+    #     print("[", end="")
+    #     print(", ".join(obj_list), end="")
+    #     print("]")
 
     def help_all(self):
         """ Help information for the all command """
