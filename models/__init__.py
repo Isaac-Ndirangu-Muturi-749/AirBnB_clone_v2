@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-    instantiates the storage system, and defines dummy classes for further use
+    instantiates the storage system, and defines classes for further use
 """
 
 
@@ -11,11 +11,9 @@ from models.state import State
 from models.user import User
 from models.place import Place
 from models.amenity import Amenity
-
-
 import os
 
-storage_engine = os.environ.get("HBNB_TYPE_STORAGE")
+storage_type = os.environ.get("HBNB_TYPE_STORAGE")
 
 if storage_type == 'db':
     from models.engine.db_storage import DBStorage

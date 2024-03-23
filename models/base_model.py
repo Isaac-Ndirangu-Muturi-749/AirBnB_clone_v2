@@ -5,6 +5,7 @@ import uuid
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, DateTime
+import models
 
 Base = declarative_base()
 
@@ -29,7 +30,7 @@ class BaseModel:
                     setattr(self, key, datetime.strptime(kwargs[key], iso))
                 else:
                     setattr(self, key, kwargs[key])
-                self.id = str(uuid4())
+                self.id = str(uuid.uuid4())
         else:
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()

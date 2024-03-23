@@ -4,13 +4,11 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
-from models.place import Place
 
 
 class City(BaseModel, Base):
     """A class for representing City objects"""
-    if (storage_engine == "db"):
-        __tablename__ = 'cities'
+    __tablename__ = 'cities'  # Always define __tablename__
 
     name = Column(String(128), nullable=False)
     state_id = Column(String(60),
@@ -20,7 +18,3 @@ class City(BaseModel, Base):
     places = relationship('Place',
                           backref='cities',
                           cascade='all, delete-orphan')
-
-    else:
-        name = ""
-        state_id = ""
